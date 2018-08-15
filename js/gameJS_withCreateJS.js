@@ -1,7 +1,7 @@
 //inilize variables
-const nRow=4;
-const nCol=4;
-const timeLimit=10000;
+const nRow=3;
+const nCol=3;
+const timeLimit=15000;
 const TRIAL_NUM=10;
 const ITI=800;
 
@@ -42,6 +42,8 @@ function loadSounds()
     SUBJ_ID=document.getElementById("subjID").value
       createjs.Sound.play("hit");
       startPage.clear();
+      mainCV.width=window.innerWidth;
+      mainCV.height=window.innerHeight;
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -204,18 +206,22 @@ function onClick(e){
     var y=e.layerY;
     var ij=Trial.xy2ij(x,y);
     var xy=Trial.ij2xy(ij.i,ij.j);
-    drawClickCircle(xy.x,xy.y)
+
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
+      drawClickCircle(xy.x,xy.y,'green')
         correctClicked();
     }
     else {
+        drawClickCircle(xy.x,xy.y,'red')
       wrongClicked();
     }
 }
-function drawClickCircle(x,y){
+function drawClickCircle(x,y,color){
+if(cir !=undefined)
+    cir.alpha=0;
   cir=new createjs.Shape();
-  cir.graphics.beginFill('orange').drawCircle(x,y,Math.min(cellWidth/3,cellHeight/3));
-  cir.alpha=0.3;
+  cir.graphics.beginFill(color).drawCircle(x,y,Math.min(cellWidth/3,cellHeight/3));
+  cir.alpha=0.1;
   stage.addChild(cir);
   //createjs.Tween.get(cir).to({alpha:0},1000).call(test);
   stage.update();
