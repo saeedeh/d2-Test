@@ -16,7 +16,7 @@
     <preference name="loadUrlTimeoutValue" value="700000" />
     <engine name="android" spec="^7.0.0" />
     <engine name="browser" spec="^5.0.3" />
-<plugin spec="https://github.com/apache/cordova-plugin-file" />
+	<plugin name="cordova-plugin-file" spec="6.0.1" />
 
 <platform name="ios">
        <allow-intent href="itms:*" />
