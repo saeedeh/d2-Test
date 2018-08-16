@@ -44,6 +44,7 @@ function loadSounds()
       startPage.clear();
       mainCV.width=window.innerWidth;
       mainCV.height=window.innerHeight;
+      writeToFile('example.json', { foo: 'bar' });
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -264,8 +265,7 @@ function onRestart(){
 startGame()
 
 //////////// file
-document.addEventListener('deviceready', onDeviceReady, false);
-function onDeviceReady() {
+//document.addEventListener('deviceready', onDeviceReady, false);
     function writeToFile(fileName, data) {
       alert('writing to file')
         data = JSON.stringify(data, null, '\t');
@@ -288,6 +288,3 @@ function onDeviceReady() {
             }, errorHandler.bind(null, fileName));
         }, errorHandler.bind(null, fileName));
     }
-
-    writeToFile('example.json', { foo: 'bar' });
-}
