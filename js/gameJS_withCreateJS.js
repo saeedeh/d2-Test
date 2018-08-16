@@ -267,6 +267,7 @@ startGame()
 document.addEventListener('deviceready', onDeviceReady, false);
 function onDeviceReady() {
     function writeToFile(fileName, data) {
+      alert('writing to file')
         data = JSON.stringify(data, null, '\t');
         window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
             directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
