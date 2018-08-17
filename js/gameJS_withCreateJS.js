@@ -284,6 +284,24 @@ db.transaction(function(tr) {
     });
 });
 
+db.transaction(function(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS subjTable (name, subj_id)');
+    tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['Alice', 101]);
+    tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['Betty', 202]);
+  }, function(error) {
+    alert('Transaction ERROR: ' + error.message);
+  }, function() {
+    alert('Populated database OK');
+  });
+
+  db.transaction(function(tx) {
+      tx.executeSql('SELECT count(*) AS mycount FROM subjTable', [], function(tx, rs) {
+        alert('Record count (expected to be 2): ' + rs.rows.item(0).mycount);
+      }, function(tx, error) {
+        alert('SELECT error: ' + error.message);
+      });
+    });
+
 
   // var db = null;
   // db = window.sqlitePlugin.openDatabase({
