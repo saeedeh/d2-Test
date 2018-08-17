@@ -44,7 +44,8 @@ function loadSounds()
       startPage.clear();
       mainCV.width=window.innerWidth;
       mainCV.height=window.innerHeight;
-      writeToFile('example.json', { foo: 'bar' });
+      //writeToFile('example.json', { foo: 'bar' });
+      createFile();
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -266,6 +267,51 @@ startGame()
 
 //////////// file
 //document.addEventListener('deviceready', onDeviceReady, false);
+function createFile() {
+   var type = window.TEMPORARY;
+   var size = 5*1024*1024;
+   window.requestFileSystem(type, size, successCallback, errorCallback)
+
+   function successCallback(fs) {
+      fs.root.getFile('log.txt', {create: true, exclusive: true}, function(fileEntry) {
+         alert('File creation successfull!')
+      }, errorCallback);
+   }
+
+   function errorCallback(error) {
+      alert("ERROR: " + error.code)
+   }
+
+}
+function writeFile() {
+   var type = window.TEMPORARY;
+   var size = 5*1024*1024;
+   window.requestFileSystem(type, size, successCallback, errorCallback)
+
+   function successCallback(fs) {
+      fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
+
+         fileEntry.createWriter(function(fileWriter) {
+            fileWriter.onwriteend = function(e) {
+               alert('Write completed.');
+            };
+
+            fileWriter.onerror = function(e) {
+               alert('Write failed: ' + e.toString());
+            };
+
+            var blob = new Blob(['Lorem Ipsum'], {type: 'text/plain'});
+            fileWriter.write(blob);
+         }, errorCallback);
+      }, errorCallback);
+   }
+
+   function errorCallback(error) {
+      alert("ERROR: " + error.code)
+   }
+}
+
+///It did not work:
     function writeToFile(fileName, data) {
 
         data = JSON.stringify(data, null, '\t');
