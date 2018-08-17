@@ -276,7 +276,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 //sqlite
 function mySQLite(){
  alert('starting to save')
-var db = window.sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
+var db = window.sqlitePlugin.openDatabase({name: 'test.db',iosDatabaseLocation: 'Documents'});
 alert('opened')
 db.transaction(function(tr) {
     tr.executeSql("SELECT upper('Test string') AS upperString", [], function(tr, rs) {
