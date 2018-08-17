@@ -21,6 +21,13 @@ const letters=['p','q','d']
 const topQuotes=['','\u030D','\u030E']; //single above, double above
 const downQuotes=['','\u0329','\u0348']; //single below, double below
 var cir
+
+//FILE
+var subjFileEntry=null;
+var subjFileWriter=null;
+var subjFileName="subj01.txt"
+
+
 function loadSounds()
 {
   createjs.Sound.registerSound("assets/click2.wav", "hit");
@@ -39,6 +46,7 @@ function loadSounds()
 
 
   function onStartClicked(e){
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     SUBJ_ID=document.getElementById("subjID").value
       createjs.Sound.play("hit");
       startPage.clear();
@@ -46,8 +54,8 @@ function loadSounds()
       mainCV.height=window.innerHeight;
       //writeToFile('example.json', { foo: 'bar' });
       //mySQLite();
-      //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-      saveToDropbox();
+    var personalData= new Blob(['name: '+'Ali'+', ID: '+ '0'+',age: '+'21'], { type: 'text/plain' })
+    appendToFile(personalData);
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -274,6 +282,43 @@ document.addEventListener("deviceready", onDeviceReady, false);
         startGame()
 
     }
+////////////////FILE new
+
+function gotFS(fileSystem) {
+    alert(" got file system! root is "+fileSystem.root)
+    fileSystem.root.getFile(subjFileName, {create: true, exclusive: false}, gotFileEntry, fail);
+}
+
+function gotFileEntry(fileEntry) {
+    subjFileEntry= fileEntry.createWriter(gotFileWriter, fail);
+    alert("got file entry")
+
+}
+function gotFileWriter(writer) {
+    subjFileWriter=writer;
+}
+function appendToFile(dataObj){
+    alert('starting to write..')
+    if (!dataObj) {
+            dataObj = new Blob(['some file data'], { type: 'text/plain' });
+        }
+    try {
+                subjFileWriter.seek(subjFileWriter.length);
+            }
+    catch (e) {
+                alert("file doesn't exist!");
+            }
+    subjFileWriter.onwriteend = function() {
+            alert("Successful file write...");
+        };
+    subjFileWriter.write(dataObj);
+}
+ function fail(error) {
+        alert("in fail");
+        alert(error.code);
+}
+
+
 
 //sqlite
 function mySQLite(){
@@ -312,109 +357,9 @@ db.transaction(function(tx) {
   // });
 }
 
-///Dropbox
-function saveToDropbox(){
-  var dbx = new Dropbox.Dropbox({ accessToken: 'TUCfVuYncmgAAAAAAAAPPGVk5xIQW6myy3rOe-elmjnnSaV7oWkHADu300glsBL7' });
-
-dbx.writeFile('hello.txt', 'Hello, World!', function () {
-        alert('File written!');
-    });
-dbx.filesListFolder({path: ''})
-  .then(function(response) {
-    console.log(response);
-  })
-  .catch(function(error) {
-    console.log(error);
-  });
-   var text= {
-    "path": "Matrices.txt",
-    "mode": "add",
-    "autorename": true,
-    "mute": false
-}
-
-}
-
 //////////// file
 //document.addEventListener('deviceready', onDeviceReady, false);
-function gotFS(fileSystem) {
-        alert("root: "+fileSystem.root)
-        fileSystem.root.getFile("myTest.txt", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
 
-    function gotFileEntry(fileEntry) {
-        alert("got file entry")
-        fileEntry.createWriter(gotFileWriter, fail);
-    }
-
-function gotFileWriter(writer) {
-        alert("got file writer")
-        writer.onwriteend = function(evt) {
-            alert("contents of file now 'some sample text'");
-            writer.truncate(11);
-            writer.onwriteend = function(evt) {
-                alert("contents of file now 'some sample'");
-                writer.seek(4);
-                writer.write(" different text");
-                writer.onwriteend = function(evt){
-                    alert("contents of file now 'some different text'");
-                }
-            };
-        };
-        writer.write("some sample text");
-    }
-
-    function fail(error) {
-        alert("in error");
-        alert(error.code);
-    }
-
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-function createFile() {
-   var type = window.TEMPORARY;
-   var size = 5*1024*1024;
-   window.requestFileSystem(type, size, successCallback, errorCallback)
-
-   function successCallback(fs) {
-      fs.root.getFile('log.txt', {create: true, exclusive: true}, function(fileEntry) {
-         alert('File creation successfull!')
-      }, errorCallback);
-   }
-
-   function errorCallback(error) {
-      alert("ERROR: " + error.code)
-   }
-
-}
-function writeFile() {
-   var type = window.TEMPORARY;
-   var size = 5*1024*1024;
-   window.requestFileSystem(type, size, successCallback, errorCallback)
-
-   function successCallback(fs) {
-      fs.root.getFile('log.txt', {create: true}, function(fileEntry) {
-
-         fileEntry.createWriter(function(fileWriter) {
-            fileWriter.onwriteend = function(e) {
-               alert('Write completed.');
-            };
-
-            fileWriter.onerror = function(e) {
-               alert('Write failed: ' + e.toString());
-            };
-
-            var blob = new Blob(['Lorem Ipsum'], {type: 'text/plain'});
-            fileWriter.write(blob);
-         }, errorCallback);
-      }, errorCallback);
-   }
-
-   function errorCallback(error) {
-      alert("ERROR: " + error.code)
-   }
-}
-
-///It did not work:
     function writeToFile(fileName, data) {
 
         data = JSON.stringify(data, null, '\t');
