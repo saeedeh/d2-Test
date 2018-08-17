@@ -268,13 +268,23 @@ startGame()
 
 //sqlite
 function mySQLite(){
-  alert('starting to save')
-  var db = null;
-  db = window.sqlitePlugin.openDatabase({
-    name: 'my.db',
-    location: 'default',
-  });
-  alert('saved')
+ alert('starting to save')
+ document.addEventListener('deviceready', function() {
+   var db = window.sqlitePlugin.openDatabase({name: 'test.db', location: 'default'});
+   alert('opened')
+   db.transaction(function(tr) {
+     tr.executeSql("SELECT upper('Test string') AS upperString", [], function(tr, rs) {
+       alert('Got upperString result: ' + rs.rows.item(0).upperString);
+     });
+   });
+ });
+
+
+  // var db = null;
+  // db = window.sqlitePlugin.openDatabase({
+  //   name: 'my.db',
+  //   location: 'default',
+  // });
 }
 
 
