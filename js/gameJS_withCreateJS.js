@@ -45,7 +45,7 @@ function loadSounds()
       mainCV.width=window.innerWidth;
       mainCV.height=window.innerHeight;
       //writeToFile('example.json', { foo: 'bar' });
-      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+      mySQLite();
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -264,6 +264,19 @@ function onRestart(){
 }
 
 startGame()
+
+//sqlite
+mySQLite(){
+  alert('starting to save')
+  var db = null;
+  db = window.sqlitePlugin.openDatabase({
+    name: 'my.db',
+    location: 'default',
+  });
+  alert('saved')
+}
+
+
 
 //////////// file
 //document.addEventListener('deviceready', onDeviceReady, false);
