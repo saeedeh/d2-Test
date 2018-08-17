@@ -264,7 +264,14 @@ function onRestart(){
     startPage.addToStage();
 }
 
-startGame()
+document.addEventListener("deviceready", onDeviceReady, false);
+    // device APIs are available
+    //
+    function onDeviceReady() {
+        // Empty
+        startGame()
+
+    }
 
 //sqlite
 function mySQLite(){
