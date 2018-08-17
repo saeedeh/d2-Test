@@ -45,7 +45,8 @@ function loadSounds()
       mainCV.width=window.innerWidth;
       mainCV.height=window.innerHeight;
       //writeToFile('example.json', { foo: 'bar' });
-      mySQLite();
+      //mySQLite();
+      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
