@@ -46,7 +46,8 @@ function loadSounds()
       mainCV.height=window.innerHeight;
       //writeToFile('example.json', { foo: 'bar' });
       //mySQLite();
-      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+      //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+      saveToDropbox();
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -311,7 +312,28 @@ db.transaction(function(tx) {
   // });
 }
 
+///Dropbox
+function saveToDropbox(){
+  var dbx = new Dropbox.Dropbox({ accessToken: 'TUCfVuYncmgAAAAAAAAPPGVk5xIQW6myy3rOe-elmjnnSaV7oWkHADu300glsBL7' });
 
+dbx.writeFile('hello.txt', 'Hello, World!', function () {
+        alert('File written!');
+    });
+dbx.filesListFolder({path: ''})
+  .then(function(response) {
+    console.log(response);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+   var text= {
+    "path": "Matrices.txt",
+    "mode": "add",
+    "autorename": true,
+    "mute": false
+}
+
+}
 
 //////////// file
 //document.addEventListener('deviceready', onDeviceReady, false);
