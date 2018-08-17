@@ -54,8 +54,8 @@ function loadSounds()
       mainCV.height=window.innerHeight;
       //writeToFile('example.json', { foo: 'bar' });
       //mySQLite();
-    var personalData= new Blob(['name: '+'Ali'+', ID: '+ '0'+',age: '+'21'], { type: 'text/plain' })
-    appendToFile(personalData);
+    //  var personalData= new Blob(['name: '+'Ali'+', ID: '+ '0'+',age: '+'21'], { type: 'text/plain' })
+    //  appendToFile(personalData);
       setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
@@ -219,7 +219,8 @@ function onClick(e){
     var y=e.layerY;
     var ij=Trial.xy2ij(x,y);
     var xy=Trial.ij2xy(ij.i,ij.j);
-
+    var trialData= new Blob(['x: '+x+', y: '+ y], { type: 'text/plain' })
+    appendToFile(trialData);
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
       drawClickCircle(xy.x,xy.y,'green')
         correctClicked();
