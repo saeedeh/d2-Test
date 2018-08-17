@@ -286,8 +286,8 @@ db.transaction(function(tr) {
 
 db.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS subjTable (name, subj_id)');
-    tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['Alice', 101]);
-    tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['Betty', 202]);
+    tx.executeSql('INSERT INTO subjTable VALUES (?,?)', ['Alice', 101]);
+    tx.executeSql('INSERT INTO subjTable VALUES (?,?)', ['Betty', 202]);
   }, function(error) {
     alert('Transaction ERROR: ' + error.message);
   }, function() {
