@@ -17,8 +17,8 @@
     <engine name="android" spec="^7.0.0" />
     <engine name="browser" spec="^5.0.3" />
 	<!-- <plugin name="cordova-plugin-file" spec="6.0.1" /> -->
-<!-- <plugin name="cordova-sqlite-storage" spec="~0.8.5" /> -->
-<plugin name="cordova-sqlite-evcore-extbuild-free"/>
+<plugin name="cordova-sqlite-storage" spec="~0.8.5" />
+<!-- <plugin name="cordova-sqlite-evcore-extbuild-free"/> -->
 <platform name="ios">
        <allow-intent href="itms:*" />
        <allow-intent href="itms-apps:*" />
