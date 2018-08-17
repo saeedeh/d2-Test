@@ -57,6 +57,7 @@ class StartPage{
     this.startBut.y=mainCV.height*2/3;
     this.startText.x=mainCV.width/2-this.startText.getBounds().width/2;
     this.startText.y=this.startBut.y+60/4.5;
+    alert("just started!")
     this.startBut.addEventListener("click",onStartClicked,true);
 
     this.domElement = new createjs.DOMElement(document.getElementById('myForm'));
@@ -266,7 +267,7 @@ function onRestart(){
 startGame()
 
 //sqlite
-mySQLite(){
+function mySQLite(){
   alert('starting to save')
   var db = null;
   db = window.sqlitePlugin.openDatabase({
