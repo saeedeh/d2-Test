@@ -268,26 +268,26 @@ startGame()
 //////////// file
 //document.addEventListener('deviceready', onDeviceReady, false);
 function gotFS(fileSystem) {
-        console.log("root: "+fileSystem.root)
+        alert("root: "+fileSystem.root)
         fileSystem.root.getFile("myTest.txt", {create: true, exclusive: false}, gotFileEntry, fail);
     }
 
     function gotFileEntry(fileEntry) {
-        console.log("got file entry")
+        alert("got file entry")
         fileEntry.createWriter(gotFileWriter, fail);
     }
 
 function gotFileWriter(writer) {
-        console.log("got file writer")
+        alert("got file writer")
         writer.onwriteend = function(evt) {
-            console.log("contents of file now 'some sample text'");
+            alert("contents of file now 'some sample text'");
             writer.truncate(11);
             writer.onwriteend = function(evt) {
-                console.log("contents of file now 'some sample'");
+                alert("contents of file now 'some sample'");
                 writer.seek(4);
                 writer.write(" different text");
                 writer.onwriteend = function(evt){
-                    console.log("contents of file now 'some different text'");
+                    alert("contents of file now 'some different text'");
                 }
             };
         };
@@ -295,8 +295,8 @@ function gotFileWriter(writer) {
     }
 
     function fail(error) {
-        console.log("in error");
-        console.log(error.code);
+        alert("in error");
+        alert(error.code);
     }
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
