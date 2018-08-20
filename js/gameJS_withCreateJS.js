@@ -23,8 +23,6 @@ const downQuotes=['','\u0329','\u0348']; //single below, double below
 var cir
 
 //time
-var trialOnsetTime;
-var clickTime
 
 //FILE
 var subjFileEntry=null;
@@ -251,7 +249,9 @@ function onClick(e){
       rightResp=true;
     }
     alert('right? '+rightResp)
-    var trialData= new Blob([trial.trialN+', '+ correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
+    alert(trial.trialN+', '+ trial.correct_ij.i+', '+trial.correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n');
+
+    var trialData= new Blob([trial.trialN+', '+ trial.correct_ij.i+', '+trial.correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
     alert('saving ')
     appendToFile(trialData);
     alert('saved')
