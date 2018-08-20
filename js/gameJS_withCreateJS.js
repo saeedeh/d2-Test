@@ -77,6 +77,7 @@ function afterFileSetup(){
   //createjs.Sound.play("hit");
 
   startPage.clear();
+  //alert('saving subj info')
   saveSubjInfo();
   setTimeout(function(){trial=new Trial(0);},10)
 }
@@ -365,10 +366,10 @@ function saveSubjInfo(){
   var age=document.getElementById('age').value;
   str=str+'Age: '+age+'\n';
   var gender='U';
-  if(document.getElementById('gender_male').checked){
+  if(document.getElementById('gender-male').checked){
     gender='M';
   }
-  else if(document.getElementById('gender_female').checked){
+  else if(document.getElementById('gender-female').checked){
     gender='F';
   }
   str= str + 'Gender: '+gender+'\n';
