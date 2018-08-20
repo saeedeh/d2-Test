@@ -280,6 +280,7 @@ if(cir !=undefined)
   },800);
 }
 function startGame(){
+  screen.orientation.lock("portrait-primary");
   loadSounds();
   mainCV =document.getElementById('mainCV')
   stage = new createjs.Stage(mainCV);
