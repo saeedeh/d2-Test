@@ -286,20 +286,20 @@ document.addEventListener("deviceready", onDeviceReady, false);
 ////////////////FILE new
 
 function gotFS(fileSystem) {
-    alert(" got file system! root is "+fileSystem.root)
+  //  alert(" got file system! root is "+fileSystem.root)
     fileSystem.root.getFile(subjFileName, {create: true, exclusive: false}, gotFileEntry, fail);
 }
 
 function gotFileEntry(fileEntry) {
     subjFileEntry= fileEntry.createWriter(gotFileWriter, fail);
-    alert("got file entry")
+  //  alert("got file entry")
 
 }
 function gotFileWriter(writer) {
     subjFileWriter=writer;
 }
 function appendToFile(dataObj){
-    alert('starting to write..')
+    //alert('starting to write..')
     if (!dataObj) {
             dataObj = new Blob(['some file data'], { type: 'text/plain' });
         }
@@ -357,29 +357,3 @@ db.transaction(function(tx) {
   //   location: 'default',
   // });
 }
-
-//////////// file
-//document.addEventListener('deviceready', onDeviceReady, false);
-
-    function writeToFile(fileName, data) {
-
-        data = JSON.stringify(data, null, '\t');
-        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (directoryEntry) {
-            directoryEntry.getFile(fileName, { create: true }, function (fileEntry) {
-                fileEntry.createWriter(function (fileWriter) {
-                    fileWriter.onwriteend = function (e) {
-                        // for real-world usage, you might consider passing a success callback
-                        alert('Write of file "' + fileName + '"" completed.');
-                    };
-
-                    fileWriter.onerror = function (e) {
-                        // you could hook this up with our global error handler, or pass in an error callback
-                        alert('Write failed: ' + e.toString());
-                    };
-
-                    var blob = new Blob([data], { type: 'text/plain' });
-                    fileWriter.write(blob);
-                }, errorHandler.bind(null, fileName));
-            }, errorHandler.bind(null, fileName));
-        }, errorHandler.bind(null, fileName));
-    }
