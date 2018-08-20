@@ -67,7 +67,7 @@ class StartPage{
     this.startBut.y=mainCV.height*2/3;
     this.startText.x=mainCV.width/2-this.startText.getBounds().width/2;
     this.startText.y=this.startBut.y+60/4.5;
-    alert("just started!")
+    //alert("just started!")
     this.startBut.addEventListener("click",onStartClicked,true);
 
     this.domElement = new createjs.DOMElement(document.getElementById('myForm'));
@@ -310,13 +310,12 @@ function appendToFile(dataObj){
                 alert("file doesn't exist!");
             }
     subjFileWriter.onwriteend = function() {
-            alert("Successful file write...");
+            //alert("Successful file write...");
         };
     subjFileWriter.write(dataObj);
 }
  function fail(error) {
-        alert("in fail");
-        alert(error.code);
+        alert("Not able to save to file. Error: "+error.code);
 }
 
 
