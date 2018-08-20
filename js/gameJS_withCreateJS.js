@@ -249,7 +249,7 @@ function onClick(e){
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
       rightResp=true;
     }
-    var trialData= new Blob([trial.trialN+', 'correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp,', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
+    var trialData= new Blob([trial.trialN+', '+ correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
     alert('saving '+trialData)
     appendToFile(trialData);
     if(rightResp){
