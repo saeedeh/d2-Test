@@ -241,6 +241,7 @@ function wrongClicked(){
 function onClick(e){
   alert('in onClick')
    trial.respTime=Date.now();
+   alert('timeStamp: '+trial.respTime);
     var x=e.layerX;
     var y=e.layerY;
     var ij=Trial.xy2ij(x,y);
@@ -249,9 +250,11 @@ function onClick(e){
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
       rightResp=true;
     }
+    alert('right? '+rightResp)
     var trialData= new Blob([trial.trialN+', '+ correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
-    alert('saving '+trialData)
+    alert('saving ')
     appendToFile(trialData);
+    alert('saved')
     if(rightResp){
       alert('right')
       drawClickCircle(xy.x,xy.y,'green')
