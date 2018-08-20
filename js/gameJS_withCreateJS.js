@@ -22,10 +22,15 @@ const topQuotes=['','\u030D','\u030E']; //single above, double above
 const downQuotes=['','\u0329','\u0348']; //single below, double below
 var cir
 
+//time
+var trialOnsetTime;
+var clickTime
+
 //FILE
 var subjFileEntry=null;
 var subjFileWriter=null;
-var subjFileName="subj01.txt"
+var subjFileName;
+var fileSetupDone;
 
 
 function loadSounds()
@@ -46,17 +51,34 @@ function loadSounds()
 
 
   function onStartClicked(e){
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     SUBJ_ID=document.getElementById("subjID").value
-      createjs.Sound.play("hit");
-      startPage.clear();
-      mainCV.width=window.innerWidth;
-      mainCV.height=window.innerHeight;
-      //writeToFile('example.json', { foo: 'bar' });
-      //mySQLite();
-    //  var personalData= new Blob(['name: '+'Ali'+', ID: '+ '0'+',age: '+'21'], { type: 'text/plain' })
-    //  appendToFile(personalData);
-      setTimeout(function(){trial=new Trial(0);},10)
+    if(isNaN(SUBJ_ID)){
+      alert('Enter a valid number for subject ID.')
+      return;
+    }
+    SUBJ_ID= +SUBJ_ID;
+    subjFileName=SUBJ_ID+'.txt';
+    createFile();
+    while(fileSetupDone==null){
+        var temp=1;
+    }
+    if (fileSetupDone==false){
+      var r = confirm("Do you want to continue without saving?");
+      if(r==false){
+        return;
+      }
+      else {
+        startPage.clear();
+        setTimeout(function(){trial=new Trial(0);},10)
+        return;
+      }
+    }
+    createjs.Sound.play("hit");
+    startPage.clear();
+
+    var personalData=getSubjInfo();
+    appendToFile(personalData);
+    setTimeout(function(){trial=new Trial(0);},10)
   }
 class StartPage{
   constructor(){
@@ -73,7 +95,7 @@ class StartPage{
     this.domElement = new createjs.DOMElement(document.getElementById('myForm'));
     this.domElement.x = mainCV.width/2-100;
     this.domElement.y = 100;
-
+    fileSetupDone=null;
   }
    addToStage(){
       stage.addChild(this.domElement);
@@ -134,6 +156,8 @@ class Trial{
           stage.addChild(this.textShapes[ind]);
       }
     }
+    this.onsetTime=Date.now();
+    this.respTime=null;
     stage.update();
     mainCV.addEventListener("click", onClick,false);
     respTimeout= setTimeout(onNoResponse,timeLimit);
@@ -201,6 +225,7 @@ function startNextTrial(){
 function onNoResponse(){
   createjs.Sound.play("timeout");
   mainCV.removeEventListener("click", onClick,false);
+  appendToFile('Timeout\n');
   startNextTrial();
 }
 
@@ -215,13 +240,18 @@ function wrongClicked(){
   createjs.Sound.play("wrong");
 }
 function onClick(e){
+   trial.respTime=Date.now();
     var x=e.layerX;
     var y=e.layerY;
     var ij=Trial.xy2ij(x,y);
     var xy=Trial.ij2xy(ij.i,ij.j);
-    var trialData= new Blob(['x: '+x+', y: '+ y], { type: 'text/plain' })
-    appendToFile(trialData);
+    var rightResp=false;
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
+      rightResp==true;
+    }
+    var trialData= new Blob([correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp,', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
+    appendToFile(trialData);
+    if(rightResp){
       drawClickCircle(xy.x,xy.y,'green')
         correctClicked();
     }
@@ -285,74 +315,62 @@ document.addEventListener("deviceready", onDeviceReady, false);
     }
 ////////////////FILE new
 
+function createFile(){
+  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+}
 function gotFS(fileSystem) {
   //  alert(" got file system! root is "+fileSystem.root)
     fileSystem.root.getFile(subjFileName, {create: true, exclusive: false}, gotFileEntry, fail);
 }
-
 function gotFileEntry(fileEntry) {
     subjFileEntry= fileEntry.createWriter(gotFileWriter, fail);
   //  alert("got file entry")
-
 }
 function gotFileWriter(writer) {
     subjFileWriter=writer;
+    fileSetupDone=true;
+}
+////////////////////////////
+function fileExists(){
+  try {
+              subjFileWriter.seek(subjFileWriter.length);
+          }
+  catch (e) {
+              return false;
+          }
+  return true;
+
 }
 function appendToFile(dataObj){
     //alert('starting to write..')
     if (!dataObj) {
             dataObj = new Blob(['some file data'], { type: 'text/plain' });
         }
-    try {
-                subjFileWriter.seek(subjFileWriter.length);
-            }
-    catch (e) {
-                alert("file doesn't exist!");
-            }
-    subjFileWriter.onwriteend = function() {
+        subjFileWriter.onwriteend = function() {
             //alert("Successful file write...");
         };
     subjFileWriter.write(dataObj);
 }
  function fail(error) {
         alert("Not able to save to file. Error: "+error.code);
+        fileSetupDone=false;
 }
 
-
-
-//sqlite
-function mySQLite(){
- alert('starting to save')
-var db = window.sqlitePlugin.openDatabase({name: 'test.db',iosDatabaseLocation: 'Documents'});
-alert('opened')
-db.transaction(function(tr) {
-    tr.executeSql("SELECT upper('Test string') AS upperString", [], function(tr, rs) {
-    alert('Got upperString result: ' + rs.rows.item(0).upperString);
-    });
-});
-
-db.transaction(function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS subjTable (name, subj_id)');
-    tx.executeSql('INSERT INTO subjTable VALUES (?,?)', ['Alice', 101]);
-    tx.executeSql('INSERT INTO subjTable VALUES (?,?)', ['Betty', 202]);
-  }, function(error) {
-    alert('Transaction ERROR: ' + error.message);
-  }, function() {
-    alert('Populated database OK');
-  });
-
-  db.transaction(function(tx) {
-      tx.executeSql('SELECT count(*) AS mycount FROM subjTable', [], function(tx, rs) {
-        alert('Record count (expected to be 2): ' + rs.rows.item(0).mycount);
-      }, function(tx, error) {
-        alert('SELECT error: ' + error.message);
-      });
-    });
-
-
-  // var db = null;
-  // db = window.sqlitePlugin.openDatabase({
-  //   name: 'my.db',
-  //   location: 'default',
-  // });
+function getSubjInfo(){
+  str='';
+  str=str+'Subj_id: '+ SUBJ_ID+'\n';
+  var age=document.getElementById('age').value;
+  str=str+'Age: '+age+'\n';
+  var gender='U';
+  if(document.getElementById('gender_male').checked){
+    gender='M';
+  }
+  else if(document.getElementById('gender_female').checked){
+    gender='F';
+  }
+  str= str + 'Gender: '+gender+'\n';
+  var comment=document.getElementById("comment").value;
+  str=str + 'Comment: ' + comment+'\n';
+  var personalData= new Blob([str], { type: 'text/plain' });
+  return personalData;
 }
