@@ -1,7 +1,7 @@
 //inilize variables
-const nRow=3;
-const nCol=3;
-const timeLimit=15000;
+const nRow=7;
+const nCol=6;
+const timeLimit=20000;
 const TRIAL_NUM=10;
 const ITI=800;
 
@@ -228,13 +228,13 @@ function onNoResponse(){
 
 function correctClicked(){
   clearTimeout(respTimeout);
-  createjs.Sound.play("right");
+//  createjs.Sound.play("right");
   trial.correctAnswered=true;
   mainCV.removeEventListener("click", onClick,false);
   setTimeout(startNextTrial,800);
 }
 function wrongClicked(){
-  createjs.Sound.play("wrong");
+  //createjs.Sound.play("wrong");
 }
 function onClick(e){
   //alert('in onClick')
