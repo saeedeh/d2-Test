@@ -61,6 +61,7 @@ function loadSounds()
     createFile();
   }
 function afterFileSetup(){
+  alert('after file setup with value: '+ fileSetupDone)
   if (fileSetupDone==false){
     var r = confirm("Do you want to continue without saving?");
     if(r==false){
