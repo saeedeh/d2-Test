@@ -59,29 +59,26 @@ function loadSounds()
     SUBJ_ID= +SUBJ_ID;
     subjFileName=SUBJ_ID+'.txt';
     createFile();
-    alert('waiting for fileSetupDone ')
-    while(fileSetupDone==null){
-        var temp=1;
-    }
-    alert('fileSetupDone got a value')
-    if (fileSetupDone==false){
-      var r = confirm("Do you want to continue without saving?");
-      if(r==false){
-        return;
-      }
-      else {
-        alert('file setup done!')
-        startPage.clear();
-        setTimeout(function(){trial=new Trial(0);},10)
-      }
-    }
-    createjs.Sound.play("hit");
-    startPage.clear();
-
-    var personalData=getSubjInfo();
-    appendToFile(personalData);
-    setTimeout(function(){trial=new Trial(0);},10)
   }
+function afterFileSetup(){
+  if (fileSetupDone==false){
+    var r = confirm("Do you want to continue without saving?");
+    if(r==false){
+      return;
+    }
+    else {
+      alert('file setup done!')
+      startPage.clear();
+      setTimeout(function(){trial=new Trial(0);},10)
+      return;
+    }
+  }
+  //createjs.Sound.play("hit");
+
+  startPage.clear();
+  saveSubjInfo();
+  setTimeout(function(){trial=new Trial(0);},10)
+}
 class StartPage{
   constructor(){
     this.startBut=new createjs.Shape();
@@ -331,6 +328,12 @@ function gotFileEntry(fileEntry) {
 function gotFileWriter(writer) {
     subjFileWriter=writer;
     fileSetupDone=true;
+    afterFileSetup();
+}
+function fail(error) {
+       alert("Not able to save to file. Error: "+error.code);
+       fileSetupDone=false;
+       afterFileSetup();
 }
 ////////////////////////////
 function fileExists(){
@@ -353,12 +356,9 @@ function appendToFile(dataObj){
         };
     subjFileWriter.write(dataObj);
 }
- function fail(error) {
-        alert("Not able to save to file. Error: "+error.code);
-        fileSetupDone=false;
-}
 
-function getSubjInfo(){
+
+function saveSubjInfo(){
   str='';
   str=str+'Subj_id: '+ SUBJ_ID+'\n';
   var age=document.getElementById('age').value;
@@ -374,5 +374,5 @@ function getSubjInfo(){
   var comment=document.getElementById("comment").value;
   str=str + 'Comment: ' + comment+'\n';
   var personalData= new Blob([str], { type: 'text/plain' });
-  return personalData;
+  appendToFile(personalData);
 }
