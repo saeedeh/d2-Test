@@ -59,18 +59,20 @@ function loadSounds()
     SUBJ_ID= +SUBJ_ID;
     subjFileName=SUBJ_ID+'.txt';
     createFile();
+    alert('waiting for fileSetupDone ')
     while(fileSetupDone==null){
         var temp=1;
     }
+    alert('fileSetupDone got a value')
     if (fileSetupDone==false){
       var r = confirm("Do you want to continue without saving?");
       if(r==false){
         return;
       }
       else {
+        alert('file setup done!')
         startPage.clear();
         setTimeout(function(){trial=new Trial(0);},10)
-        return;
       }
     }
     createjs.Sound.play("hit");
