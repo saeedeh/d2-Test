@@ -68,7 +68,6 @@ function afterFileSetup(){
       return;
     }
     else {
-      alert('file setup done!')
       startPage.clear();
       setTimeout(function(){trial=new Trial(0);},10)
       return;
@@ -77,7 +76,6 @@ function afterFileSetup(){
   //createjs.Sound.play("hit");
 
   startPage.clear();
-  //alert('saving subj info')
   saveSubjInfo();
   setTimeout(function(){trial=new Trial(0);},10)
 }
@@ -248,7 +246,7 @@ function onClick(e){
     var xy=Trial.ij2xy(ij.i,ij.j);
     var rightResp=false;
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
-      rightResp==true;
+      rightResp=true;
     }
     var trialData= new Blob([correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp,', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
     appendToFile(trialData);
