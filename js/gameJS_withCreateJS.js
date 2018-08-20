@@ -239,6 +239,7 @@ function wrongClicked(){
   createjs.Sound.play("wrong");
 }
 function onClick(e){
+  alert('in onClick')
    trial.respTime=Date.now();
     var x=e.layerX;
     var y=e.layerY;
@@ -248,13 +249,16 @@ function onClick(e){
     if(ij.i==trial.correct_ij.i && ij.j==trial.correct_ij.j){
       rightResp=true;
     }
-    var trialData= new Blob([correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp,', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
+    var trialData= new Blob([trial.trialN+', 'correct_ij.i+', '+correct_ij.j+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp,', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
+    alert('saving '+trialData)
     appendToFile(trialData);
     if(rightResp){
+      alert('right')
       drawClickCircle(xy.x,xy.y,'green')
         correctClicked();
     }
     else {
+      alert('wrong');
         drawClickCircle(xy.x,xy.y,'red')
       wrongClicked();
     }
