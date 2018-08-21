@@ -355,7 +355,9 @@ document.addEventListener("deviceready", onDeviceReady, false);
 ////////////////FILE new
 
 function createFile(){
-  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+  fileSetupDone=true;
+  afterFileSetup();
+  //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
 }
 function gotFS(fileSystem) {
   //  alert(" got file system! root is "+fileSystem.root)
@@ -388,13 +390,11 @@ function fileExists(){
 }
 function appendToFile(dataObj){
     //alert('starting to write..')
-    if (!dataObj) {
-            dataObj = new Blob(['some file data'], { type: 'text/plain' });
-        }
-        subjFileWriter.onwriteend = function() {
-            //alert("Successful file write...");
-        };
-    subjFileWriter.write(dataObj);
+    var reader = new FileReader();
+    reader.onload = function() {
+    console.log(reader.result);
+}
+reader.readAsText(dataObj);
 }
 
 

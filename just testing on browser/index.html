@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>TimeGame</title>
+  <meta name="description" content="TimeGame">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+     <!-- <script src="libs/soundjs.js"></script> -->
+    <!-- <script src="libs/easeljs.min.js"></script> -->
+    <!-- <script src="libs/tweenjs.min.js"></script> -->
+    <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+<script scr="libs/soundjs.min"></script>
+<script src="https://code.createjs.com/1.0.0/easeljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tweenjs/1.0.2/tweenjs.js"></script>
+<!-- <script src="libs/Dropbox-sdk.min.js"></script> -->
+</head>
+
+<body>
+  <!-- <div class="wrapper">
+    <button class="gameButton" id="startBut"> Start </button>
+  </dive> -->
+  <form id="myForm" class="form-style-2" style="visibility: hidden">
+    <label for="subjID"><span>Subject ID <span class="required">*</span></span>
+    <input type="text" class="input-field"  id="subjID" ><br/></label>
+
+    <label  for="age"><span>Age </span>
+    <input type="text" class="input-field" id="age"><br/></label>
+
+    <br/>
+    <label for="gender"><span class="radio-label">Gender </span>
+    <input type="radio" name="gender" value="male" id="gender-male" > Male
+    <input type="radio" name="gender" value="female" id="gender-female" class="radio-field"> Female</label>
+
+    <label  for="comment"><span>Comment </span>
+    <input type="text" class="input-field" id="comment" width="200px"><br/></label>
+</form>
+        <canvas id="mainCV" >Sorry, your browser is not supported.</canvas>
+         <!-- <script type="text/javascript" src="cordova.js"></script> -->
+        <script src="js/gameJS_withCreateJS.js"></script>
+<script>startGame();</script>
+</body>
+</html>
