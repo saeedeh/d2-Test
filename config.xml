@@ -24,7 +24,7 @@
 </feature>
 <plugin name="cordova-plugin-x-socialsharing" source="npm" />
 <!-- <plugin name="cordova-sqlite-storage" spec="~0.8.5" /> -->
-<!-- <plugin name="cordova-sqlite-evcore-extbuild-free"/>
+<!-- <plugin name="cordova-sqlite-evcore-extbuild-free"/> -->
 <!-- <plugin name="cordova-plugin-email-composer"/> -->
 <platform name="ios">
        <allow-intent href="itms:*" />
