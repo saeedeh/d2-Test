@@ -22,7 +22,7 @@ body, canvas, html{margin:0;padding:0;border:0 none;}
     margin: 0px 0px 15px 0px;
 }
 .form-style-2 label > span{
-    width: 70%;
+    width: 100%;
     font-weight: bold;
     float: left;
     padding-top: 8px;

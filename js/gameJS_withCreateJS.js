@@ -398,6 +398,7 @@ function finishGame(){
   stage.update();
 endPage= new EndPage()
 endPage.addToStage();
+fileShare();
 }
 function playAgain(e){
   createjs.Sound.play("hit");
@@ -610,4 +611,26 @@ function saveSubjInfo(){
   str=str + 'Comment: ' + comment+'\n';
   var personalData= new Blob([str], { type: 'text/plain' });
   appendToFile(personalData);
+}
+
+//file sharing
+// this is the complete list of currently supported params you can pass to the plugin (all optional)
+
+function fileShare(){
+  var options = {
+  message: 'share data', // not supported on some apps (Facebook, Instagram)
+  subject: 'd2 Test iPad data', // fi. for email
+  files: ['/Documents/'+subjFileName], // an array of filenames either locally or remotely
+  };
+
+  var onSuccess = function(result) {
+    alert("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
+    alert("Shared to app: " + result.app); // On Android result.app since plugin version 5.4.0 this is no longer empty. On iOS it's empty when sharing is cancelled (result.completed=false)
+  };
+
+  var onError = function(msg) {
+    alert("Sharing failed with message: " + msg);
+  };
+
+  window.plugins.socialsharing.shareWithOptions(options, onSuccess, onError);
 }
