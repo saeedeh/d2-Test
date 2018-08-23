@@ -5,7 +5,7 @@ var p_target=0.3333;
 var numTarget=22;
 const timeLimit=20000;
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const TRIAL_NUM=1;
+const TRIAL_NUM=14;
 const ITI=1000;
 
 const fontSize=35;
@@ -129,7 +129,7 @@ class EndPage{
 
       this.shareText=new createjs.Text("Share Results", "20px "+BUTTON_FONT, "#002b2b");
       this.shareText.x=mainCV.width/2-this.shareText.getBounds().width/2;
-      this.shareText.y=this.againRect.y+120;
+      this.shareText.y=this.againText.y+120;
       this.shareRect=new createjs.Shape();
       this.shareRect=createButton(this.shareRect,150,60)
       this.shareRect.x=mainCV.width/2-150/2;
@@ -192,7 +192,9 @@ class Trial{
     this.textShapes=[];
     this.correctAnswered=false;
     this.correctAr=[];
-    var str = new Date().toJSON()+', '
+    var str ='';
+    str=str+'trial: '+trialN+'\n';
+    str= str+new Date().toJSON()+', '
     str=str+Date.now()+'\n'
     this.correctAr=Trial.randBool(this.correctAr,nRow*nCol,numTarget)
     for(var i=0;i<nRow;i++){
