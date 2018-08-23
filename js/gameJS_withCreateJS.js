@@ -127,12 +127,24 @@ class EndPage{
       this.againRect.x=mainCV.width/2-150/2;
       this.againRect.y=this.againText.y-60/4.5;
 
+      this.shareText=new createjs.Text("Share Results", "20px "+BUTTON_FONT, "#002b2b");
+      this.shareText.x=mainCV.width/2-this.shareText.getBounds().width/2;
+      this.shareText.y=this.shareText.y+120;
+      this.shareRect=new createjs.Shape();
+      this.shareRect=createButton(this.shareRect,150,60)
+      this.shareRect.x=mainCV.width/2-150/2;
+      this.shareRect.y=this.shareText.y-60/4.5;
+
   }
  addToStage(){
     stage.addChild(this.gameOverText);
     stage.addChild(this.againRect);
     stage.addChild(this.againText)
+
+    stage.addChild(this.shareRect);
+    stage.addChild(this.shareText)
     this.againRect.addEventListener("click",playAgain);
+    this.shareRect.addEventListener("click",fileShare);
     stage.update();
   }
 }
@@ -641,8 +653,8 @@ function fileShare(){
   };
 
   var onSuccess = function(result) {
-    alert("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
-    alert("Shared to app: " + result.app); // On Android result.app since plugin version 5.4.0 this is no longer empty. On iOS it's empty when sharing is cancelled (result.completed=false)
+  //  alert("Share completed? " + result.completed); // On Android apps mostly return false even while it's true
+    //alert("Shared to app: " + result.app); // On Android result.app since plugin version 5.4.0 this is no longer empty. On iOS it's empty when sharing is cancelled (result.completed=false)
   };
 
   var onError = function(msg) {
