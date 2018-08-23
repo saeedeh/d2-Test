@@ -1,7 +1,8 @@
 //inilize variables
 const nRow=10;
 const nCol=6;
-var p_target=0.1;
+var p_target=0.3333;
+var numTarget=22;
 const timeLimit=20000;
 const TRIAL_NUM=10;
 const ITI=1000;
@@ -15,13 +16,14 @@ var stage;
 var mainCV;
 var startPage,endPage;
 var trial;
+var practiceTrial;
 var cellWidth,cellHeight;
 var respTimeout;
 var SUBJ_ID
 const letters=['p','d']
 const topQuotes=['','\u030D','\u030E']; //single above, double above
 const downQuotes=['','\u0329','\u0348']; //single below, double below
-var cir
+//var cir
 
 //time
 
@@ -68,7 +70,8 @@ function afterFileSetup(){
     }
     else {
       startPage.clear();
-      setTimeout(function(){trial=new Trial(0);},10)
+      //setTimeout(function(){trial=new Trial(0);},10)
+      setTimeout(function(){practiceTrial=new PracticeTrial();},10)
       return;
     }
   }
@@ -76,7 +79,7 @@ function afterFileSetup(){
 
   startPage.clear();
   saveSubjInfo();
-  setTimeout(function(){trial=new Trial(0);},10)
+  setTimeout(function(){practiceTrial=new PracticeTrial(0);},10)
 }
 class StartPage{
   constructor(){
@@ -132,23 +135,57 @@ class EndPage{
     stage.update();
   }
 }
+
+class instructionPage{
+  constructor(){
+    this.text='You will see a page containing a number of  \'d and \'p letters.'+
+    'Each letter can have one or two dashes above and/or below it.'+
+    ' Your task is to touch letters \'d\' when it has a total of two dashes above or below it.'+
+    '\n\nThese are the letters you have to touch\n'+
+    'd'+topQuotes[1]+'  '+'d'+downQuotes[1]+'  '+
+    'd'+topQuotes[0]+downQuotes[0]+
+    '\n\nAnd these are all other letters you have to ignore:\n'+
+    'd'+topQuotes[1]+dwonQuotes[1]+ '  '+
+    'd'+topQuotes[0]+'  '+
+    'd'+            downQuotes[0]+'  '+
+    'd'+topQuotes[0]+downQuotes[1]+ '  '+
+    'd'+topQuotes[1]+downQuotes[0]+ '  '+
+
+    'p'+topQuotes[1]+'  '+'p'+downQuotes[1]+'  '+
+    'p'+topQuotes[0]+downQuotes[0]+
+    'p'+topQuotes[1]+dwonQuotes[1]+ '  '+
+    'p'+topQuotes[0]+'  '+
+    'p'+            downQuotes[0]+'  '+
+    'p'+topQuotes[0]+downQuotes[1]+ '  '+
+    'p'+topQuotes[1]+downQuotes[0]+ '  ';
+   this.txtShape=new createjs.Text(this.text,fontStr,'black');
+   this.txtShape.x=10;this.txtShape.y=10;
+   this.nextBut=new createjs.Shape();
+   this.startBut=createButton(this.startBut,250,60)
+   this.startBut.x=mainCV.width/2-150/2;
+   this.startBut.y=mainCV.height*2/3;
+   this.nextText=new createjs.Text("Practice", "20px "+BUTTON_FONT, "#002b2b");
+
+  }
+  addToStage(){
+    stage.addChild(this.txtShape);
+    stage.update();
+
+  }
+}
 class Trial{
   constructor(trialN){
     this.trialN=trialN;
     this.textShapes=[];
     this.correctAnswered=false;
     this.correctAr=[];
-    var str='';
+    var str = new Date().toJSON()+', '
+    str=str+Date.now()+'\n'
+    this.correctAr=Trial.randBool(this.correctAr,nRow*nCol,numTarget)
     for(var i=0;i<nRow;i++){
       for(var j=0; j<nCol;j++){
           var ind=Trial.ij2ind(i,j);
-          if(Math.random()<p_target){
-            this.correctAr[ind]=true;
-          }
-          else {
-            this.correctAr[ind]=false;
-          }
-          if(ind==0){
+          if(j==0){
               str=str+this.correctAr[ind];
             }
           else {
@@ -164,6 +201,7 @@ class Trial{
           this.textShapes[ind].y=xy.y-fontSize/1.2;
           stage.addChild(this.textShapes[ind]);
       }
+      str=str+'\n'
     }
     str=str+'\n'
     var trialInfo=new Blob([str],{ type: 'text/plain' })
@@ -174,6 +212,34 @@ class Trial{
     mainCV.addEventListener("click", onClick,false);
     respTimeout= setTimeout(onNoResponse,timeLimit);
   }
+  static  shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+static randBool(ar,n,m){
+  for(var i=0;i<n;i++){
+    ar[i]=false;
+    if(i < m){
+      ar[i]=true;
+    }
+  }
+  ar=Trial.shuffle(ar);
+  return ar;
+}
   static getRandomStr(){
     var ind1=Trial.getRandomInt(3);
     var ind2=Trial.getRandomInt(3);
@@ -190,6 +256,8 @@ class Trial{
     return 'd'+topQuotes[ind1]+downQuotes[ind2];
   }
   static ij2ind(i,j){
+    if(i<0 ||j<0)
+      return -1;
     return i*nCol+j;
   }
   static ind2ij(ind){
@@ -237,7 +305,7 @@ function startNextTrial(){
 function onNoResponse(){
   createjs.Sound.play("timeout");
   mainCV.removeEventListener("click", onClick,false);
-  appendToFile(new Blob(['Timeout\n'], {type:'text/plain'}));
+  appendToFile(new Blob(['-1\n'], {type:'text/plain'}));
   startNextTrial();
 }
 
@@ -263,7 +331,7 @@ function onClick(e){
     var rightResp=trial.correctAr[ind];
     //alert('right? '+rightResp)
 
-    var clickData= new Blob([trial.trialN+', '+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
+    var clickData= new Blob([trial.trialN+ ', '+ij.i+', '+ij.j +', '+ x+ ', '+ y+ ', '+rightResp+ ', '+trial.onsetTime+', '+trial.respTime+'\n'], { type: 'text/plain' })
     //alert('saving ')
     appendToFile(clickData);
     //alert('saved')
@@ -297,23 +365,23 @@ function drawLine(x,y){
   stage.addChild(line2);
   stage.update();
 }
-function drawClickCircle(x,y,color){
-if(cir !=undefined)
-    cir.alpha=0;
-  cir=new createjs.Shape();
+function drawClickCircle(x,y,color,disappear,alpha){
+  var cir=new createjs.Shape();
   cir.graphics.beginFill(color).drawCircle(x,y,Math.min(cellWidth/3,cellHeight/3));
-  cir.alpha=0.1;
+  cir.alpha=alpha;
   stage.addChild(cir);
   //createjs.Tween.get(cir).to({alpha:0},1000).call(test);
   stage.update();
-  setTimeout(function(){
-    cir.alpha=0;
-    stage.update();
-  },800);
+  if(disappear){
+    setTimeout(function(){
+      cir.alpha=0;
+      stage.update();
+    },1000);
+  }
 }
 function startGame(){
 
-  screen.orientation.lock("portrait");
+  //screen.orientation.lock("portrait");
   loadSounds();
   mainCV =document.getElementById('mainCV')
   stage = new createjs.Stage(mainCV);
@@ -343,6 +411,133 @@ function onRestart(){
   startPage=new StartPage();
     startPage.addToStage();
 }
+
+
+
+//practice trials
+
+class PracticeTrial{
+  constructor(){
+    this.textShapes=[];
+    this.correctAnswered=false;
+    this.correctAr=[];
+    this.numRow=5;
+    this.numCol=nCol;
+    for(var i=0;i<this.numRow;i++){
+      for(var j=0; j<this.numCol;j++){
+          var ind=Trial.ij2ind(i,j);
+          if(Math.random()<p_target){
+            this.correctAr[ind]=true;
+          }
+          else {
+            this.correctAr[ind]=false;
+          }
+          if(this.correctAr[ind])
+              this.textShapes[ind] = new createjs.Text(Trial.getRandomTargetStr(), fontStr, 'black')
+          else
+              this.textShapes[ind] = new createjs.Text(Trial.getRandomStr(), fontStr, 'black')
+          this.textShapes[ind].ind=ind;
+          var xy=Trial.ij2xy(i,j);
+          this.textShapes[ind].x=xy.x-fontSize/3;
+          this.textShapes[ind].y=xy.y-fontSize/1.2;
+          stage.addChild(this.textShapes[ind]);
+      }
+    }
+    //add buttons
+
+    this.ansBut=new createjs.Shape();
+    this.ansText=new createjs.Text("Solution", "20px "+BUTTON_FONT, "#002b2b");
+    this.ansBut=createButton(this.ansBut,150,60)
+    this.ansBut.x=mainCV.width/2-150/2;
+    this.ansBut.y=mainCV.height*2/3;
+    this.ansText.x=mainCV.width/2-this.ansText.getBounds().width/2;
+    this.ansText.y=this.ansBut.y+60/4.5;
+
+    stage.addChild(this.ansBut);
+    stage.addChild(this.ansText);
+    stage.update();
+    mainCV.addEventListener("click", onPracticeClick,false);
+    this.ansBut.addEventListener("click",OnSeeAnswers,true);
+
+    //make finish and practice more buttons
+    this.pmBut=new createjs.Shape();
+    this.pmText=new createjs.Text("Practice more", "20px "+BUTTON_FONT, "#002b2b");
+    this.pmBut=createButton(this.pmBut,150,60)
+    this.pmBut.x=mainCV.width/2-150/2-200;
+    this.pmBut.y=mainCV.height*2/3;
+    this.pmText.x=mainCV.width/2-this.pmText.getBounds().width/2-200;
+    this.pmText.y=this.pmBut.y+60/4.5;
+
+    this.fpBut=new createjs.Shape();
+    this.fpText=new createjs.Text("Finish practice", "20px "+BUTTON_FONT, "#002b2b");
+    this.fpBut=createButton(this.fpBut,150,60)
+    this.fpBut.x=mainCV.width/2-150/2+200;
+    this.fpBut.y=mainCV.height*2/3;
+    this.fpText.x=mainCV.width/2-this.fpText.getBounds().width/2+200;
+    this.fpText.y=this.fpBut.y+60/4.5;
+    stage.update()
+  }
+}
+function onPracticeClick(e){
+  var x=e.layerX;
+  var y=e.layerY;
+  var ij=Trial.xy2ij(x,y);
+  var xy=Trial.ij2xy(ij.i,ij.j);
+  var ind=Trial.ij2ind(ij.i,ij.j);
+  var rightResp=practiceTrial.correctAr[ind];
+  if(rightResp){
+      //drawClickCircle(xy.x,xy.y,'green',false,0.1)
+      drawLine(xy.x,xy.y)
+  }
+  else if(ij.i>=0 && ij.j>=0 && ij.i<practiceTrial.numRow){
+    drawClickCircle(xy.x,xy.y,'red',true,0.1)
+  }
+}
+function OnSeeAnswers(){
+  mainCV.removeEventListener("click", onPracticeClick,false);
+  practiceTrial.ansBut.removeEventListener("click",OnSeeAnswers,true);
+  for(var i=0;i<practiceTrial.numRow;i++){
+    for(var j=0; j<practiceTrial.numCol;j++){
+        var ind=Trial.ij2ind(i,j);
+        if(practiceTrial.correctAr[ind]){
+          xy=Trial.ij2xy(i,j);
+          drawClickCircle(xy.x,xy.y,'green',false,0.4)
+        }
+      }
+    }
+    stage.removeChild(practiceTrial.ansBut);
+    stage.removeChild(practiceTrial.ansText);
+
+    practiceTrial.pmBut.addEventListener("click",function(){
+      stage.clear();
+      stage.removeAllChildren();
+      stage.update();
+      setTimeout(function(){practiceTrial=new PracticeTrial();},10)
+    },true);
+
+
+    practiceTrial.fpBut.addEventListener("click",function(){
+      stage.clear();
+      stage.removeAllChildren();
+      stage.addChild(startPage.startBut);
+      stage.addChild(startPage.startText);
+      stage.update();
+      startPage.startBut.addEventListener('click',function(){
+        stage.removeAllChildren();
+        stage.update();
+        setTimeout(function(){trial=new Trial(0);},10)
+      },true)
+      stage.update();
+    },true);
+
+
+    stage.addChild(practiceTrial.fpBut);
+    stage.addChild(practiceTrial.fpText);
+    stage.addChild(practiceTrial.pmBut);
+    stage.addChild(practiceTrial.pmText);
+    stage.update();
+}
+////////////////////////////////////////////////
 
 document.addEventListener("deviceready", onDeviceReady, false);
     // device APIs are available
