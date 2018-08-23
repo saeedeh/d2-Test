@@ -4,7 +4,7 @@ const nCol=6;
 var p_target=0.3333;
 var numTarget=22;
 const timeLimit=20000;
-const TRIAL_NUM=10;
+const TRIAL_NUM=14;
 const ITI=1000;
 
 const fontSize=35;
@@ -305,7 +305,7 @@ function startNextTrial(){
 function onNoResponse(){
   createjs.Sound.play("timeout");
   mainCV.removeEventListener("click", onClick,false);
-  appendToFile(new Blob(['-1\n'], {type:'text/plain'}));
+  appendToFile(new Blob(['-1\n\n\n'], {type:'text/plain'}));
   startNextTrial();
 }
 
