@@ -129,7 +129,7 @@ class EndPage{
 
       this.shareText=new createjs.Text("Share Results", "20px "+BUTTON_FONT, "#002b2b");
       this.shareText.x=mainCV.width/2-this.shareText.getBounds().width/2;
-      this.shareText.y=this.shareText.y+120;
+      this.shareText.y=this.againRect.y+120;
       this.shareRect=new createjs.Shape();
       this.shareRect=createButton(this.shareRect,150,60)
       this.shareRect.x=mainCV.width/2-150/2;
@@ -375,7 +375,7 @@ function drawLine(x,y){
   line2.graphics.moveTo(x-r, y+r)
   line2.graphics.lineTo(x+r,y-r);
   stage.addChild(line1);
-  stage.addChild(line2);
+  //stage.addChild(line2);
   stage.update();
 }
 function drawClickCircle(x,y,color,disappear,alpha){
