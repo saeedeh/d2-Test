@@ -399,8 +399,8 @@ function finishGame(){
   stage.update();
 endPage= new EndPage()
 endPage.addToStage();
-//fileShare();
-emailRes();
+fileShare();
+//emailRes();
 }
 function playAgain(e){
   createjs.Sound.play("hit");
@@ -618,6 +618,11 @@ function saveSubjInfo(){
 //file sharing
 // this is the complete list of currently supported params you can pass to the plugin (all optional)
 function emailRes(){
+  window.plugin.email.isServiceAvailable(
+    function (isAvailable) {
+        alert('is available')
+    }
+);
     cordova.plugins.email.open({
       to:          'ss3767@cornell.edu', // email addresses for TO field
     //  cc:          Array, // email addresses for CC field
@@ -632,7 +637,7 @@ function fileShare(){
   var options = {
   message: 'share data', // not supported on some apps (Facebook, Instagram)
   subject: 'd2 Test iPad data', // fi. for email
-  files: ['Documents/'+subjFileName], // an array of filenames either locally or remotely
+  files: [cordova.file.documentsDirectory+subjFileName], // an array of filenames either locally or remotely
   };
 
   var onSuccess = function(result) {
