@@ -4,7 +4,8 @@ const nCol=6;
 var p_target=0.3333;
 var numTarget=22;
 const timeLimit=20000;
-const TRIAL_NUM=14;
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const TRIAL_NUM=1;
 const ITI=1000;
 
 const fontSize=35;
@@ -381,7 +382,7 @@ function drawClickCircle(x,y,color,disappear,alpha){
 }
 function startGame(){
 
-  //screen.orientation.lock("portrait");
+  screen.orientation.lock("portrait");
   loadSounds();
   mainCV =document.getElementById('mainCV')
   stage = new createjs.Stage(mainCV);
@@ -398,7 +399,8 @@ function finishGame(){
   stage.update();
 endPage= new EndPage()
 endPage.addToStage();
-fileShare();
+//fileShare();
+emailRes();
 }
 function playAgain(e){
   createjs.Sound.play("hit");
@@ -615,12 +617,22 @@ function saveSubjInfo(){
 
 //file sharing
 // this is the complete list of currently supported params you can pass to the plugin (all optional)
+function emailRes(){
+    cordova.plugins.email.open({
+      to:          'ss3767@cornell.edu', // email addresses for TO field
+    //  cc:          Array, // email addresses for CC field
+    //  bcc:         Array, // email addresses for BCC field
+      attachments: 'app://Documents/'+subjFileName, // file paths or base64 data streams
+      subject:    'd2 test data file (SUBJECT: '+SUBJ_ID+')', // subject of the email
+      body:       ' ', // email body (for HTML, set isHtml to true)
+  }, callback, scope);
 
+}
 function fileShare(){
   var options = {
   message: 'share data', // not supported on some apps (Facebook, Instagram)
   subject: 'd2 Test iPad data', // fi. for email
-  files: ['/Documents/'+subjFileName], // an array of filenames either locally or remotely
+  files: ['Documents/'+subjFileName], // an array of filenames either locally or remotely
   };
 
   var onSuccess = function(result) {

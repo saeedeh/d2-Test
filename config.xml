@@ -19,12 +19,13 @@
 	<plugin name="cordova-plugin-file" spec="6.0.1" />
   <plugin name="cordova-plugin-screen-orientation"/>
 
-  <feature name="SocialSharing">
+  <!-- <feature name="SocialSharing">
   <param name="ios-package" value="SocialSharing" />
 </feature>
-<plugin name="cordova-plugin-x-socialsharing" source="npm" />
+<plugin name="cordova-plugin-x-socialsharing" source="npm" /> -->
 <!-- <plugin name="cordova-sqlite-storage" spec="~0.8.5" /> -->
 <!-- <plugin name="cordova-sqlite-evcore-extbuild-free"/> -->
+<plugin name="cordova-plugin-email-composer"/>
 <platform name="ios">
        <allow-intent href="itms:*" />
        <allow-intent href="itms-apps:*" />
